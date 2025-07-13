@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💡 Smart AI Tools + Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #1a1a1d, #2d2d3b);
+      color: white;
+    }
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      background: #000;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #0ff; }
+      to { text-shadow: 0 0 20px #0ff; }
+    }
+    h1 { font-size: 2.5rem; }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    .chat-section input, .chat-section button {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+    .chat-section input {
+      width: 60%;
+      border: none;
+      margin-right: 10px;
+    }
+    .chat-section button {
+      background: #00bcd4;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .chat-section button:hover {
+      background: #0097a7;
+    }
+    #response {
+      margin-top: 20px;
+      padding: 20px;
+      background: #2c2c3d;
+      border-radius: 8px;
+    }
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      color: #ffd700;
+    }
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .tool a {
+      text-decoration: none;
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      padding: 15px;
+      border-radius: 10px;
+      display: block;
+      text-align: center;
+      transition: 0.3s ease;
+    }
+    .tool a:hover {
+      background: rgba(0,255,255,0.2);
+      transform: scale(1.05);
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: rgba(255,255,255,0.05);
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .game-section {
+      text-align: center;
+      margin-top: 50px;
+    }
+    .game-section button {
+      padding: 10px 25px;
+      font-size: 18px;
+      background: limegreen;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    footer {
+      text-align: center;
+      padding: 30px;
+      margin-top: 40px;
+      background: #111;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔧 AI Tools + Chat + Games</h1>
+    <p>Most Useful & Trending Web Hub</p>
+  </header>
+
+  <div class="container">
+    <!-- AI Chat Section -->
+    <div class="chat-section">
+      <input id="userInput" type="text" placeholder="Ask anything to AI..." />
+      <button onclick="sendMessage()">Ask</button>
+      <div id="response">💬 AI will respond here...</div>
+    </div>
+
+    <!-- Tools -->
+    <h2>🛠️ Online Tools</h2>
+    <div class="tools">
+      <div class="tool"><a href="https://image-background-remover.com" target="_blank">🖼️ Background Remover</a></div>
+      <div class="tool"><a href="https://www.unitconverters.net" target="_blank">📏 Unit Converter</a></div>
+      <div class="tool"><a href="https://www.colorpicker.com" target="_blank">🎨 Color Picker</a></div>
+      <div class="tool"><a href="https://compressor.io" target="_blank">📎 File Compressor</a></div>
+      <div class="tool"><a href="https://passwordsgenerator.net" target="_blank">🔐 Password Generator</a></div>
+      <div class="tool"><a href="https://jsfiddle.net" target="_blank">✍️ Code Editor</a></div>
+    </div>
+
+    <!-- Crypto Section -->
+    <h2>📈 Live Crypto Prices</h2>
+    <ul>
+      <li>Bitcoin (BTC): $64,500</li>
+      <li>Ethereum (ETH): $3,200</li>
+      <li>Solana (SOL): $142</li>
+    </ul>
+
+    <!-- News Section -->
+    <h2>📰 Top Global News</h2>
+    <ul>
+      <li>🚀 ISRO successfully launches Chandrayaan-4</li>
+      <li>📡 Elon Musk unveils next-gen AI chip</li>
+      <li>🔥 Global heatwave sets new temperature records</li>
+      <li>🌐 Meta releases GPT-4 competitor</li>
+    </ul>
+
+    <!-- Game Section -->
+    <div class="game-section">
+      <h2>🎮 Click Game</h2>
+      <p>Increase your score with every click!</p>
+      <h3 id="score">Score: 0</h3>
+      <button onclick="document.getElementById('score').innerText = 'Score: ' + (++score)">Click Me!</button>
+    </div>
+  </div>
+
+  <footer>
+    Made with ❤️ by Sumant | Monetize via Tools + Ads + Affiliate
+  </footer>
+
+  <script>
+    let score = 0;
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const responseDiv = document.getElementById("response");
+
+      if (!input.value.trim()) {
+        responseDiv.innerText = "❗ Please type something.";
+        return;
+      }
+
+      responseDiv.innerText = "🤖 Thinking...";
+
+      const res = await fetch("/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input.value })
+      });
+
+      const data = await res.json();
+      responseDiv.innerText = "💬 " + data.reply;
+      input.value = "";
+    }
+  </script>
+</body><style>.news-list li {
+  background: rgba(255, 255, 255, 0.05);
+  margin: 6px 0;
+  padding: 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.news-list li:hover {
+  background: rgba(0, 255, 255, 0.15);
+  transform: translateX(5px) scale(1.02);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+  cursor: pointer;
+}
+</style><ul><!-- News Section -->
+<h2>📰 Top Global News</h2>
+<ul class="news-list">
+  <li>🚀 ISRO successfully launches Chandrayaan-4</li>
+  <li>📡 Elon Musk unveils next-gen AI chip</li>
+  <li>🔥 Global heatwave sets new temperature records</li>
+  <li>🌐 Meta releases GPT-4 competitor</li>
+  <li>📈 Bitcoin crosses $65,000 mark again</li>
+  <li>🧠 AI used in cancer detection breakthrough</li>
+  <li>🚁 Drone deliveries to begin in rural India</li>
+  <li>🏆 India wins ICC Test Championship</li>
+  <li>📵 Government to regulate deepfakes strictly</li>
+  <li>🌋 New volcanic activity spotted in Indonesia</li>
+  <li>🌌 NASA detects water vapor on exoplanet</li>
+  <li>💻 Microsoft unveils quantum laptop concept</li>
+  <li>🎥 Netflix announces AI-generated film</li>
+  <li>📊 Stock markets hit all-time high globally</li>
+  <li>🎮 PlayStation 6 teased with AI-based features</li>
+</ul>
+
+</html>
+"""
+
